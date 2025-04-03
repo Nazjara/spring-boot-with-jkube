@@ -12,7 +12,7 @@
 
   <groupId>com.nazjara</groupId>
   <artifactId>spring-boot-with-jkube</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <name>spring-boot-with-jkube</name>
   <description>spring-boot-with-jkube</description>
 
@@ -45,7 +45,31 @@
   </dependencies>
 
   <build>
+    <finalName>${project.artifactId}</finalName>
     <plugins>
+      <plugin>
+        <groupId>org.eclipse.jkube</groupId>
+        <artifactId>kubernetes-maven-plugin</artifactId>
+        <version>1.18.1</version>
+        <configuration>
+          <images>
+            <image>
+              <name>${project.artifactId}:${project.version}</name>
+              <build>
+                <dockerFile>${project.basedir}/Dockerfile</dockerFile>
+              </build>
+            </image>
+          </images>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
