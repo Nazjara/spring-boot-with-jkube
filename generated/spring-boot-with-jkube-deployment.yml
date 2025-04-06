@@ -1,0 +1,69 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    jkube.eclipse.org/scm-url: https://github.com/spring-projects/spring-boot/spring-boot-with-jkube
+    jkube.eclipse.org/scm-tag: HEAD
+    jkube.eclipse.org/git-commit: 6f493fbc6aa9cdf59ddcf0012ac0b762d81a77a8
+    jkube.eclipse.org/git-url: https://github.com/Nazjara/spring-boot-with-jkube.git
+    jkube.eclipse.org/git-branch: master
+  labels:
+    app: spring-boot-with-jkube
+    provider: jkube
+    version: 1.0.0-SNAPSHOT
+    group: com.nazjara
+    app.kubernetes.io/part-of: com.nazjara
+    app.kubernetes.io/managed-by: jkube
+    app.kubernetes.io/name: spring-boot-with-jkube
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  name: spring-boot-with-jkube
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: spring-boot-with-jkube
+      provider: jkube
+      group: com.nazjara
+      app.kubernetes.io/name: spring-boot-with-jkube
+      app.kubernetes.io/part-of: com.nazjara
+      app.kubernetes.io/managed-by: jkube
+  template:
+    metadata:
+      annotations:
+        jkube.eclipse.org/scm-url: https://github.com/spring-projects/spring-boot/spring-boot-with-jkube
+        jkube.eclipse.org/scm-tag: HEAD
+        jkube.eclipse.org/git-commit: 6f493fbc6aa9cdf59ddcf0012ac0b762d81a77a8
+        jkube.eclipse.org/git-url: https://github.com/Nazjara/spring-boot-with-jkube.git
+        jkube.eclipse.org/git-branch: master
+      labels:
+        app: spring-boot-with-jkube
+        provider: jkube
+        version: 1.0.0-SNAPSHOT
+        group: com.nazjara
+        app.kubernetes.io/part-of: com.nazjara
+        app.kubernetes.io/managed-by: jkube
+        app.kubernetes.io/name: spring-boot-with-jkube
+        app.kubernetes.io/version: 1.0.0-SNAPSHOT
+      name: spring-boot-with-jkube
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: spring-boot-with-jkube:1.0.0-SNAPSHOT
+        imagePullPolicy: IfNotPresent
+        name: comnazjara-spring-boot-with-jkube
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        securityContext:
+          privileged: false

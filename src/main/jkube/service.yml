@@ -1,0 +1,6 @@
+# JKube doesn't generate config for nodePort, so we make it using a manual config for it
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30080

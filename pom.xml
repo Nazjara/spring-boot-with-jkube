@@ -68,26 +68,45 @@
             <image>
               <name>${project.artifactId}:${project.version}</name>
               <build>
-                <dockerFile>${project.basedir}/Dockerfile</dockerFile>
-                <assembly>
-                  <targetDir>/</targetDir>
-                  <inline>
-                    <files>
-                      <file>
-                        <source>${project.build.directory}/${project.build.finalName}.jar</source>
-                        <outputDirectory>/</outputDirectory>
-                      </file>
-                    </files>
-                  </inline>
-                </assembly>
+                <from>openjdk:21-jdk-slim</from>
+                <ports>
+                  <port>8080</port>
+                </ports>
+                <env>
+                  <JAVA_APP_DIR>/deployments</JAVA_APP_DIR>
+                </env>
               </build>
             </image>
           </images>
+          <resources>
+            <labels>
+              <all>
+                <app>${project.artifactId}</app>
+              </all>
+            </labels>
+          </resources>
+          <enricher>
+            <config>
+              <jkube-service>
+                <type>NodePort</type>
+                <port>8080</port>
+                <nodePort>30080</nodePort> <!-- this doesn't work, so we use a fragment file -->
+              </jkube-service>
+              <jkube-controller>
+                <name>${project.artifactId}</name>
+                <replicas>1</replicas>
+                <imagePullPolicy>IfNotPresent</imagePullPolicy>
+              </jkube-controller>
+            </config>
+          </enricher>
         </configuration>
         <executions>
           <execution>
+            <id>jkube</id>
             <goals>
               <goal>build</goal>
+              <goal>resource</goal>
+              <goal>apply</goal>
             </goals>
             <phase>package</phase>
           </execution>
