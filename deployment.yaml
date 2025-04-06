@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-with-jkube
+  labels:
+    app: spring-boot-with-jkube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-boot-with-jkube
+  template:
+    metadata:
+      name: spring-boot-with-jkube
+      labels:
+        app: spring-boot-with-jkube
+    spec:
+      containers:
+        - name: spring-boot-with-jkube
+          image: spring-boot-with-jkube:1.0.0-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+      restartPolicy: Always

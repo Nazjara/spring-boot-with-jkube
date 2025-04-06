@@ -48,6 +48,18 @@
     <finalName>${project.artifactId}</finalName>
     <plugins>
       <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.eclipse.jkube</groupId>
         <artifactId>kubernetes-maven-plugin</artifactId>
         <version>1.18.1</version>
@@ -57,6 +69,17 @@
               <name>${project.artifactId}:${project.version}</name>
               <build>
                 <dockerFile>${project.basedir}/Dockerfile</dockerFile>
+                <assembly>
+                  <targetDir>/</targetDir>
+                  <inline>
+                    <files>
+                      <file>
+                        <source>${project.build.directory}/${project.build.finalName}.jar</source>
+                        <outputDirectory>/</outputDirectory>
+                      </file>
+                    </files>
+                  </inline>
+                </assembly>
               </build>
             </image>
           </images>
@@ -69,30 +92,6 @@
             <phase>package</phase>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <annotationProcessorPaths>
-            <path>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-            </path>
-          </annotationProcessorPaths>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-            </exclude>
-          </excludes>
-        </configuration>
       </plugin>
     </plugins>
   </build>
