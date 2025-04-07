@@ -67,27 +67,6 @@
         <artifactId>kubernetes-maven-plugin</artifactId>
         <version>1.18.1</version>
         <configuration>
-          <images>
-            <image>
-              <name>${project.artifactId}:${project.version}</name>
-              <build>
-                <from>openjdk:21-jdk-slim</from>
-                <ports>
-                  <port>8080</port>
-                </ports>
-                <env>
-                  <JAVA_APP_DIR>/deployments</JAVA_APP_DIR>
-                </env>
-              </build>
-            </image>
-          </images>
-          <resources>
-            <labels>
-              <all>
-                <app>${project.artifactId}</app>
-              </all>
-            </labels>
-          </resources>
           <enricher>
             <config>
               <jkube-service>
@@ -101,6 +80,7 @@
                 <imagePullPolicy>IfNotPresent</imagePullPolicy>
               </jkube-controller>
               <jkube-healthcheck>
+                <mode>override</mode>
                 <readiness>
                   <httpGet>
                     <path>/actuator/health/readiness</path>
@@ -122,6 +102,36 @@
               </jkube-healthcheck>
             </config>
           </enricher>
+          <images>
+            <image>
+              <name>${project.artifactId}:${project.version}</name>
+              <build>
+                <from>openjdk:21-jdk-slim</from>
+                <workdir>/deployments</workdir>
+                <assembly>
+                  <targetDir>/deployments</targetDir>
+                </assembly>
+                <ports>
+                  <port>8080</port>
+                </ports>
+                <entryPoint>
+                  <exec>
+                    <arg>java</arg>
+                    <arg>-jar</arg>
+                    <arg>${project.build.finalName}.jar</arg>
+                  </exec>
+                </entryPoint>
+              </build>
+            </image>
+          </images>
+          <skipPush>true</skipPush>
+          <resources>
+            <labels>
+              <all>
+                <app>${project.artifactId}</app>
+              </all>
+            </labels>
+          </resources>
         </configuration>
         <executions>
           <execution>
