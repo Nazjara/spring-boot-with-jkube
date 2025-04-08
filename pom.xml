@@ -79,27 +79,6 @@
                 <replicas>1</replicas>
                 <imagePullPolicy>IfNotPresent</imagePullPolicy>
               </jkube-controller>
-              <jkube-healthcheck>
-                <mode>override</mode>
-                <readiness>
-                  <httpGet>
-                    <path>/actuator/health/readiness</path>
-                    <port>8080</port>
-                    <scheme>HTTP</scheme>
-                  </httpGet>
-                  <initialDelaySeconds>10</initialDelaySeconds>
-                  <periodSeconds>10</periodSeconds>
-                  <failureThreshold>3</failureThreshold>
-                </readiness>
-                <liveness>
-                  <httpGet>
-                    <path>/actuator/health/liveness</path>
-                    <port>8080</port>
-                  </httpGet>
-                  <initialDelaySeconds>30</initialDelaySeconds>
-                  <periodSeconds>30</periodSeconds>
-                </liveness>
-              </jkube-healthcheck>
             </config>
           </enricher>
           <images>

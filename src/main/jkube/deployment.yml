@@ -1,0 +1,22 @@
+# With a plugin configuration, JKube generates a default config for probes,
+# To fix this - we provide it with a fragment file
+spec:
+  template:
+    spec:
+      containers:
+      - name: spring-boot-with-jkube
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
